@@ -53,6 +53,7 @@ plot_models(x, y, None, os.path.join("..", "1400_01_01.png"))
 
 # create and plot models
 fp1, res, rank, sv, rcond = sp.polyfit(x, y, 1, full=True)
+
 print("Model parameters: %s" % fp1)
 print("Error of the model:", res)
 f1 = sp.poly1d(fp1)
@@ -65,9 +66,11 @@ plot_models(x, y, [f1], os.path.join("..", "1400_01_02.png"))
 plot_models(x, y, [f1, f2], os.path.join("..", "1400_01_03.png"))
 plot_models(
     x, y, [f1, f2, f3, f10, f100], os.path.join("..", "1400_01_04.png"))
-
+# exit()
 # fit and plot a model using the knowledge about inflection point
-inflection = 3.5 * 7 * 24
+inflection = int(3.5 * 7 * 24)
+print(inflection)
+
 xa = x[:inflection]
 ya = y[:inflection]
 xb = x[inflection:]
