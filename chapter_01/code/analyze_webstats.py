@@ -9,7 +9,7 @@ print(data[:10])
 
 # all examples will have three classes in this file
 colors = ['g', 'k', 'b', 'm', 'r']
-linestyles = ['-', '-.', '--', ':', '-']
+line_style_list = ['-', '-.', '--', ':', '-']
 
 x = data[:, 0]
 y = data[:, 1]
@@ -17,10 +17,21 @@ print("Number of invalid entries:", sp.sum(sp.isnan(y)))
 x = x[~sp.isnan(y)]
 y = y[~sp.isnan(y)]
 
-# plot input data
 
+def plot_models(x, y, models, filename, mx=None, ymax=None, xmin=None):
+    # plot input data
+    """
+    绘制输入的数据
 
-def plot_models(x, y, models, fname, mx=None, ymax=None, xmin=None):
+    :param x:
+    :param y:
+    :param models:
+    :param filename: 图片的文件名
+    :param mx:
+    :param ymax:
+    :param xmin:
+    :return:
+    """
     plt.clf()
     plt.scatter(x, y, s=10)
     plt.title("Web traffic over the last month")
@@ -32,7 +43,7 @@ def plot_models(x, y, models, fname, mx=None, ymax=None, xmin=None):
     if models:
         if mx is None:
             mx = sp.linspace(0, x[-1], 1000)
-        for model, style, color in zip(models, linestyles, colors):
+        for model, style, color in zip(models, line_style_list, colors):
             # print "Model:",model
             # print "Coeffs:",model.coeffs
             plt.plot(mx, model(mx), linestyle=style, linewidth=2, c=color)
@@ -46,7 +57,8 @@ def plot_models(x, y, models, fname, mx=None, ymax=None, xmin=None):
     if xmin:
         plt.xlim(xmin=xmin)
     plt.grid(True, linestyle='-', color='0.75')
-    plt.savefig(fname)
+    plt.savefig(filename)
+
 
 # first look at the data
 plot_models(x, y, None, os.path.join("..", "1400_01_01.png"))
@@ -84,6 +96,7 @@ plot_models(x, y, [fa, fb], os.path.join("..", "1400_01_05.png"))
 
 def error(f, x, y):
     return sp.sum((f(x) - y) ** 2)
+
 
 print("Errors for the complete data set:")
 for f in [f1, f2, f3, f10, f100]:
