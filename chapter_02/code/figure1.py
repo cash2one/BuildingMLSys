@@ -1,6 +1,13 @@
+'''
+    绘制鸢尾花的分布图
+'''
+
+
 import numpy as np
+
 from sklearn.datasets import load_iris
 from matplotlib import pyplot as plt
+
 
 data = load_iris()
 features = data['data']

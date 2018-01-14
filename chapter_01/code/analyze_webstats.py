@@ -13,7 +13,8 @@ linestyles = ['-', '-.', '--', ':', '-']
 
 x = data[:, 0]
 y = data[:, 1]
-print("Number of invalid entries:", sp.sum(sp.isnan(y)))
+# print("Number of invalid entries:", sp.sum(sp.isnan(y)))
+print("无效实例的数量:", sp.sum(sp.isnan(y)))
 x = x[~sp.isnan(y)]
 y = y[~sp.isnan(y)]
 
@@ -54,8 +55,10 @@ plot_models(x, y, None, os.path.join("..", "1400_01_01.png"))
 # create and plot models
 fp1, res, rank, sv, rcond = sp.polyfit(x, y, 1, full=True)
 
-print("Model parameters: %s" % fp1)
-print("Error of the model:", res)
+# print("Model parameters: %s" % fp1)
+print("模型参数: %s" % fp1)
+# print("Error of the model:", res)
+print("模型误差:", res)
 f1 = sp.poly1d(fp1)
 f2 = sp.poly1d(sp.polyfit(x, y, 2))
 f3 = sp.poly1d(sp.polyfit(x, y, 3))
@@ -85,15 +88,20 @@ plot_models(x, y, [fa, fb], os.path.join("..", "1400_01_05.png"))
 def error(f, x, y):
     return sp.sum((f(x) - y) ** 2)
 
-print("Errors for the complete data set:")
+# print("Errors for the complete data set:")
+print("整个数据集的误差:")
 for f in [f1, f2, f3, f10, f100]:
-    print("Error d=%i: %f" % (f.order, error(f, x, y)))
+    # print("Error d=%i: %f" % (f.order, error(f, x, y)))
+    print("误差 d=%i: %f" % (f.order, error(f, x, y)))
 
-print("Errors for only the time after inflection point")
+# print("Errors for only the time after inflection point")
+print("在拐点后的误差")
 for f in [f1, f2, f3, f10, f100]:
-    print("Error d=%i: %f" % (f.order, error(f, xb, yb)))
+    # print("Error d=%i: %f" % (f.order, error(f, xb, yb)))
+    print("误差 d=%i: %f" % (f.order, error(f, xb, yb)))
 
-print("Error inflection=%f" % (error(fa, xa, ya) + error(fb, xb, yb)))
+# print("Error inflection=%f" % (error(fa, xa, ya) + error(fb, xb, yb)))
+print("误差拐点=%f" % (error(fa, xa, ya) + error(fb, xb, yb)))
 
 
 # extrapolating into the future
@@ -102,16 +110,19 @@ plot_models(
     mx=sp.linspace(0 * 7 * 24, 6 * 7 * 24, 100),
     ymax=10000, xmin=0 * 7 * 24)
 
-print("Trained only on data after inflection point")
+# print("Trained only on data after inflection point")
+print("只训练在拐点后的数据")
 fb1 = fb
 fb2 = sp.poly1d(sp.polyfit(xb, yb, 2))
 fb3 = sp.poly1d(sp.polyfit(xb, yb, 3))
 fb10 = sp.poly1d(sp.polyfit(xb, yb, 10))
 fb100 = sp.poly1d(sp.polyfit(xb, yb, 100))
 
-print("Errors for only the time after inflection point")
+# print("Errors for only the time after inflection point")
+print("在拐点后的误差")
 for f in [fb1, fb2, fb3, fb10, fb100]:
-    print("Error d=%i: %f" % (f.order, error(f, xb, yb)))
+    # print("Error d=%i: %f" % (f.order, error(f, xb, yb)))
+    print("误差 d=%i: %f" % (f.order, error(f, xb, yb)))
 
 plot_models(
     x, y, [fb1, fb2, fb3, fb10, fb100], os.path.join("..", "1400_01_07.png"),
@@ -130,9 +141,11 @@ fbt3 = sp.poly1d(sp.polyfit(xb[train], yb[train], 3))
 fbt10 = sp.poly1d(sp.polyfit(xb[train], yb[train], 10))
 fbt100 = sp.poly1d(sp.polyfit(xb[train], yb[train], 100))
 
-print("Test errors for only the time after inflection point")
+# print("Test errors for only the time after inflection point")
+print("在拐点后的测试误差")
 for f in [fbt1, fbt2, fbt3, fbt10, fbt100]:
-    print("Error d=%i: %f" % (f.order, error(f, xb[test], yb[test])))
+    # print("Error d=%i: %f" % (f.order, error(f, xb[test], yb[test])))
+    print("误差 d=%i: %f" % (f.order, error(f, xb[test], yb[test])))
 
 plot_models(
     x, y, [fbt1, fbt2, fbt3, fbt10, fbt100], os.path.join("..",
@@ -144,4 +157,6 @@ from scipy.optimize import fsolve
 print(fbt2)
 print(fbt2 - 100000)
 reached_max = fsolve(fbt2 - 100000, 800) / (7 * 24)
-print("100,000 hits/hour expected at week %f" % reached_max[0])
+# print("100,000 hits/hour expected at week %f" % reached_max[0])
+print("预计在 %f 周后达到100,000次/小时的点击量" % int(round(reached_max[0])))
+print("预计在 %f 周后达到100,000次/小时的点击量" % reached_max[0])
